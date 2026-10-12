@@ -1,0 +1,51 @@
+{
+  "schema": "vpremises-security/audit/v1",
+  "collector_budget_seconds": 300,
+  "observer": {
+    "schema_version": "vpremises.observer/v1",
+    "roots": [
+      {
+        "id": "selected-mount",
+        "path": "/mnt/c/Inspection/Selected"
+      }
+    ],
+    "limits": {
+      "max_depth": 16,
+      "max_entries": 20000,
+      "max_total_bytes": 268435456
+    },
+    "policy": {
+      "metadata_only": true,
+      "follow_symlinks": false
+    }
+  },
+  "collectors": {
+    "content": {
+      "tool": {
+        "executable": "/opt/security-tools/zixcel-repository-security",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "timeout_seconds": 120
+      },
+      "settings": "/private/detection.json"
+    },
+    "network": {
+      "tool": {
+        "executable": "/opt/security-tools/crowsi-host-network-sensor",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "timeout_seconds": 120
+      },
+      "baseline": "/private/network-baseline.json"
+    },
+    "boundary": {
+      "tool": {
+        "executable": "/opt/security-tools/crowsi-boundary-monitor",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "timeout_seconds": 120
+      },
+      "input": "/private/boundary-input.json",
+      "input_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "observed_at_unix_ms": 0,
+      "max_age_seconds": 300
+    }
+  }
+}

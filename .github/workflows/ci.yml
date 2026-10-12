@@ -1,0 +1,35 @@
+name: Verify product compositions
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      CARGO_INCREMENTAL: '0'
+      CARGO_BUILD_JOBS: '2'
+      CARGO_PROFILE_DEV_DEBUG: '0'
+      CARGO_PROFILE_TEST_DEBUG: '0'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - run: rustup toolchain install 1.97 --profile minimal --component rustfmt --component clippy
+      - name: Verify preserved source history
+        run: git bundle verify docs/source-history/vpremises-security.bundle && git bundle verify docs/source-history/vpremises-credential.bundle
+      - run: cargo +1.97 fmt --all -- --check
+      - run: cargo +1.97 clippy --locked --workspace --all-targets --all-features -- -D warnings
+      - run: cargo +1.97 test --locked --workspace --all-targets --all-features
+      - run: cargo +1.97 test --locked --workspace --doc --all-features
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24.15.0'
+          package-manager-cache: false
+      - name: Verify native manifest source and ABI binding with synthetic inputs
+        run: python3 scripts/test_windows_release_manifest.py
+      - name: Verify product release request authorization
+        run: node --test apps/security-inspector/scripts/release-request.test.mjs

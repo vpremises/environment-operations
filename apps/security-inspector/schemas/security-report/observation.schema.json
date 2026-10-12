@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "ok",
+    "policy",
+    "totals",
+    "roots",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "vpremises.observation/v1"
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "access_mode",
+        "disclosure",
+        "symlink_policy"
+      ],
+      "properties": {
+        "access_mode": {
+          "const": "metadata-only"
+        },
+        "disclosure": {
+          "const": "aggregate-counts-only"
+        },
+        "symlink_policy": {
+          "const": "skip"
+        }
+      }
+    },
+    "totals": {
+      "$ref": "totals.schema.json"
+    },
+    "roots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "root_id",
+          "complete",
+          "totals"
+        ],
+        "properties": {
+          "root_id": {
+            "type": "string"
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "totals": {
+            "$ref": "totals.schema.json"
+          }
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "diagnostic.schema.json"
+      }
+    }
+  }
+}

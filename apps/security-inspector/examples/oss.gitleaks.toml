@@ -1,0 +1,14 @@
+title = "OSS publication content policy"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "oss-private-material-marker"
+description = "Private-key or certificate marker requires publication review"
+regex = '''-----BEGIN (?:[A-Z ]+)?(?:PRIVATE KEY|CERTIFICATE)-----'''
+
+[[rules]]
+id = "oss-github-credential-marker"
+description = "GitHub credential-shaped material requires publication review"
+regex = '''gh[pousr]_[A-Za-z0-9]{30,}'''

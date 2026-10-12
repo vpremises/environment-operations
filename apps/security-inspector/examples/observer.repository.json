@@ -1,0 +1,18 @@
+{
+  "schema_version": "vpremises.observer/v1",
+  "roots": [
+    {
+      "id": "vpremises-example-package",
+      "path": "."
+    }
+  ],
+  "limits": {
+    "max_depth": 4,
+    "max_entries": 256,
+    "max_total_bytes": 16777216
+  },
+  "policy": {
+    "metadata_only": true,
+    "follow_symlinks": false
+  }
+}

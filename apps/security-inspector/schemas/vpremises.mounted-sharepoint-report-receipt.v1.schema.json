@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vpremises://contracts/mounted-sharepoint-report-receipt/v1",
+  "title": "vPremises mounted SharePoint report acquisition receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "request_id",
+    "receipt_id",
+    "correlation_id",
+    "root_id",
+    "artifact_id",
+    "operational_report_id",
+    "headquarters_id",
+    "department_id",
+    "reporting_team_id",
+    "schema_id",
+    "media_type",
+    "size_bytes",
+    "digest_sha256",
+    "classification",
+    "customer_data",
+    "external_actions"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vpremises://contracts/mounted-sharepoint-report-receipt/v1"
+    },
+    "request_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "receipt_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "correlation_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "root_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "artifact_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "operational_report_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "headquarters_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "department_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "reporting_team_id": {
+      "$ref": "#/$defs/identifier"
+    },
+    "schema_id": {
+      "const": "estate://operations/department-daily-report/v1"
+    },
+    "media_type": {
+      "const": "application/json"
+    },
+    "size_bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4194304
+    },
+    "digest_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "classification": {
+      "enum": [
+        "internal",
+        "internal-confidential",
+        "personal-confidential",
+        "restricted-sensitive",
+        "customer-confidential"
+      ]
+    },
+    "customer_data": {
+      "type": "boolean"
+    },
+    "external_actions": {
+      "const": false
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$"
+    }
+  }
+}

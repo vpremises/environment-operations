@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "status",
+    "reason",
+    "scope",
+    "finding_count",
+    "gap_count",
+    "evidence_sha256"
+  ],
+  "properties": {
+    "id": {
+      "enum": [
+        "filesystem-metadata",
+        "content-disclosure",
+        "network-exposure",
+        "isolation-boundary"
+      ]
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "incomplete",
+        "unsupported",
+        "findings"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{1,64}$"
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "selected-mounted-roots",
+        "not-collected",
+        "current-linux-network-namespace",
+        "operator-supplied-boundary-observation"
+      ]
+    },
+    "finding_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "gap_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

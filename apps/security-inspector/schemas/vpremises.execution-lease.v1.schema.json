@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vpremises://contracts/execution-lease/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "lease_id", "request_id", "request_digest_sha256", "invocation_id", "action_digest_sha256", "state_revision", "state", "placement"],
+  "properties": {
+    "schema": { "const": "vpremises://contracts/execution-lease/v1" },
+    "lease_id": { "$ref": "#/$defs/id" }, "request_id": { "$ref": "#/$defs/id" },
+    "request_digest_sha256": { "$ref": "#/$defs/digest" }, "invocation_id": { "$ref": "#/$defs/id" },
+    "action_digest_sha256": { "$ref": "#/$defs/digest" }, "state_revision": { "type": "integer", "minimum": 0 },
+    "state": { "const": "prepared" },
+    "placement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_ref", "environment_ref", "resource_profile_ref"],
+      "properties": {
+        "provider_ref": { "$ref": "#/$defs/id" }, "environment_ref": { "$ref": "#/$defs/id" },
+        "resource_profile_ref": { "$ref": "#/$defs/id" }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

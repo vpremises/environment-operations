@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vpremises://contracts/execution-lease-request/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "request_id", "invocation_id", "workspace_ref", "action_id", "action_digest_sha256", "effective_grant_digest_sha256", "placement", "expected_state_revision", "idempotency_key"],
+  "properties": {
+    "schema": { "const": "vpremises://contracts/execution-lease-request/v1" },
+    "request_id": { "$ref": "#/$defs/id" }, "invocation_id": { "$ref": "#/$defs/id" },
+    "workspace_ref": { "$ref": "#/$defs/id" }, "action_id": { "type": "string", "maxLength": 256 },
+    "action_digest_sha256": { "$ref": "#/$defs/digest" },
+    "effective_grant_digest_sha256": { "$ref": "#/$defs/digest" },
+    "placement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["provider_ref", "environment_ref", "resource_profile_ref"],
+      "properties": {
+        "provider_ref": { "$ref": "#/$defs/id" }, "environment_ref": { "$ref": "#/$defs/id" },
+        "resource_profile_ref": { "$ref": "#/$defs/id" }
+      }
+    },
+    "expected_state_revision": { "type": "integer", "minimum": 0 },
+    "idempotency_key": { "$ref": "#/$defs/id" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

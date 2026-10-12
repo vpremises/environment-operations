@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "tool_version",
+    "environment_id",
+    "operating_system",
+    "started_at_unix_ms",
+    "finished_at_unix_ms",
+    "configuration_sha256",
+    "outcome",
+    "external_actions",
+    "checks",
+    "observation"
+  ],
+  "properties": {
+    "schema": {
+      "const": "vpremises-security/report/v2"
+    },
+    "tool_version": {
+      "type": "string"
+    },
+    "environment_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9._-]{1,128}$"
+    },
+    "operating_system": {
+      "const": "linux"
+    },
+    "started_at_unix_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "finished_at_unix_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "configuration_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "outcome": {
+      "enum": [
+        "passed",
+        "findings",
+        "incomplete"
+      ]
+    },
+    "external_actions": {
+      "const": false
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "$ref": "security-report/check.schema.json"
+      }
+    },
+    "observation": {
+      "$ref": "security-report/observation.schema.json"
+    }
+  },
+  "title": "vpremises-security/report/v2"
+}

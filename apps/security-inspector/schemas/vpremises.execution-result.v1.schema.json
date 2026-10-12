@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vpremises://contracts/execution-result/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "lease_id", "invocation_id", "action_digest_sha256", "state_revision", "outcome", "output", "reason_id"],
+  "properties": {
+    "schema": { "const": "vpremises://contracts/execution-result/v1" },
+    "lease_id": { "$ref": "#/$defs/id" }, "invocation_id": { "$ref": "#/$defs/id" },
+    "action_digest_sha256": { "$ref": "#/$defs/digest" }, "state_revision": { "type": "integer", "minimum": 0 },
+    "outcome": { "enum": ["completed", "failed", "denied", "cancelled"] },
+    "output": { "anyOf": [{ "$ref": "#/$defs/projection" }, { "type": "null" }] },
+    "reason_id": { "anyOf": [{ "type": "string", "maxLength": 256 }, { "type": "null" }] }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "projection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["owner_id", "projection_ref", "schema_id", "digest_sha256"],
+      "properties": {
+        "owner_id": { "$ref": "#/$defs/id" }, "projection_ref": { "$ref": "#/$defs/id" },
+        "schema_id": { "type": "string", "maxLength": 256 }, "digest_sha256": { "$ref": "#/$defs/digest" }
+      }
+    }
+  }
+}

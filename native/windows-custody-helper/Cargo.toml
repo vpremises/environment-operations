@@ -1,0 +1,15 @@
+[package]
+name = "vpremises-windows-custody-helper"
+version = "0.10.0"
+edition = "2024"
+rust-version = "1.97"
+license = "Apache-2.0"
+description = "Native Windows CurrentUser credential custody helper"
+publish = false
+repository = "https://github.com/vpremises/environment-operations"
+
+[dependencies]
+crowsi-windows-custody-provider = { version = "=0.10.2", git = "https://github.com/crowsi-net/credential-custody.git", rev = "bd11b5e827fd9760181722a1bd1761a77fa8dacc" }
+
+[lints.rust]
+unsafe_code = "forbid"

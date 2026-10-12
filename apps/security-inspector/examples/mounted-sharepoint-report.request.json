@@ -1,0 +1,23 @@
+{
+  "schema": "vpremises://contracts/mounted-sharepoint-report-request/v1",
+  "request_id": "request-department-daily-report-20260724",
+  "correlation_id": "case-department-daily-report-20260724",
+  "artifact_id": "internal-platform-report-department-daily-20260724",
+  "expected_report": {
+    "record_mode": "simulation-seed",
+    "reporting_date": "2026-07-24",
+    "headquarters_id": "software-platform-oss",
+    "department_id": "internal-platform",
+    "reporting_team_id": "internal-platform-team-01",
+    "owner_account_id": "internal-platform-role-01-01",
+    "classification": "internal-confidential",
+    "customer_data": false
+  },
+  "allowlisted_root": {
+    "id": "mounted-sharepoint-department-reports",
+    "base": "request-directory",
+    "relative_path": "fixtures"
+  },
+  "relative_file": "department-daily-report.json",
+  "max_bytes": 262144
+}

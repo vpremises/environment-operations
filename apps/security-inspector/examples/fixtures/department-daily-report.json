@@ -1,0 +1,40 @@
+{
+  "schema": "estate://operations/department-daily-report/v1",
+  "operational_report_id": "internal-platform-report-department-daily-20260724",
+  "record_mode": "simulation-seed",
+  "reporting_date": "2026-07-24",
+  "headquarters_id": "software-platform-oss",
+  "department_id": "internal-platform",
+  "reporting_team_id": "internal-platform-team-01",
+  "owner_account_id": "internal-platform-role-01-01",
+  "window_started_at": "2026-07-24T00:00:00+09:00",
+  "window_ended_at": "2026-07-24T17:00:00+09:00",
+  "generated_at": "2026-07-24T17:10:00+09:00",
+  "source_case_ids": [
+    "service-connectivity-review-internal-platform"
+  ],
+  "source_event_ids": [
+    "service-connectivity-review-internal-platform-event"
+  ],
+  "source_task_ids": [
+    "work-task-service-connectivity-review-2026-07-internal-platform"
+  ],
+  "source_report_ids": [
+    "internal-platform-team-daily-20260724"
+  ],
+  "source_artifact_ids": [
+    "internal-platform-team-01-artifact-operating-review-pack"
+  ],
+  "escalated_decision_ids": [],
+  "metrics": {
+    "completed_tasks": 1,
+    "open_tasks": 0,
+    "blocked_tasks": 0,
+    "reported_deliverables": 1,
+    "open_escalations": 0
+  },
+  "exceptions": [],
+  "classification": "internal-confidential",
+  "customer_data": false,
+  "summary": "Bounded fixture used to verify mounted report acquisition."
+}

@@ -1,0 +1,16 @@
+[package]
+name = "vpremises-credential-examples"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.97"
+license = "Apache-2.0"
+description = "Explicit synthetic credential examples and fail-closed CLI boundary checks"
+readme = "README.md"
+repository = "https://github.com/vpremises/environment-operations"
+publish = false
+default-run = "crowsi-credential"
+
+[dependencies]
+crowsi-credential-broker = { version = "=0.1.1", git = "https://github.com/crowsi-net/credential-custody.git", rev = "bd11b5e827fd9760181722a1bd1761a77fa8dacc" }
+getrandom = "0.3.4"
+serde_json = "1.0.145"

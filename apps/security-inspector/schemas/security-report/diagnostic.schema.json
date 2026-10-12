@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "code",
+    "root_id",
+    "field",
+    "message"
+  ],
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "root_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "field": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}

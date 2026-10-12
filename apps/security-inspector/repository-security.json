@@ -1,0 +1,9 @@
+{
+  "schema": "zixcel://repository-security/policy/v2",
+  "repository_id": "vpremises-security",
+  "scope": "source-secret-disclosure/v1",
+  "required_engines": [
+    "gitleaks"
+  ],
+  "gitleaks_version": "8.30.1"
+}

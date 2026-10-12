@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vpremises://contracts/execution-control/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "request_id", "lease_id", "invocation_id", "expected_state_revision", "idempotency_key", "kind"],
+  "properties": {
+    "schema": { "const": "vpremises://contracts/execution-control/v1" },
+    "request_id": { "$ref": "#/$defs/id" }, "lease_id": { "$ref": "#/$defs/id" },
+    "invocation_id": { "$ref": "#/$defs/id" }, "expected_state_revision": { "type": "integer", "minimum": 0 },
+    "idempotency_key": { "$ref": "#/$defs/id" }, "kind": { "enum": ["read-status", "cancel", "recover", "cleanup"] }
+  },
+  "$defs": { "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" } }
+}
