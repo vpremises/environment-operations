@@ -5,6 +5,8 @@ Product composition for environment operations. Reusable policy, custody and obs
 | Path | Existing package | Responsibility |
 | --- | --- | --- |
 | apps/security-inspector | vpremises-security | Product inspection CLI and portable Linux bundle composition |
+| apps/environment-plan | vpremises-environment-plan | Operator commands consuming the public environment core and Incus renderer |
+| playground/environment-planning | synthetic CLI consumer | Disposable resolve/render/plan/receipt/replay demonstration |
 | playground/credential-operations | vpremises-credential-examples | Synthetic credential workflows and fail-closed command boundaries |
 | native/windows-custody-helper | vpremises-windows-custody-helper | Standalone Windows executable; independent native signing and acceptance |
 
@@ -15,7 +17,9 @@ cargo +1.97 run --locked -p vpremises-credential-examples -- --help
 
 The product uses credential-custody through an exact public Git revision while registry/source publication is reviewed. Security bundle collectors fetch exact security-observations revisions at build time, never at runtime. Product dependencies do not use a private registry or local sibling checkout. Existing package names, wire IDs and publish=false remain unchanged.
 
-CI verifies synthetic inputs only. It does not enroll accounts, install services, access real credentials, enable timers or publish native releases. Windows/WSL identity, native signing and deployment acceptance remain separate owner inputs. Existing app-specific scripts and documentation are preserved under apps/security-inspector; native release workflows are not automatically enabled. Original public source history is preserved under docs/source-history.
+CI verifies synthetic inputs, builds Windows helper artifacts and attests main artifacts; the owner promotes reviewed assets to a GitHub Release. It does not enroll real accounts, install services, access customer credentials or enable timers. Windows/WSL identity, native signing and deployment acceptance remain separate owner inputs. Existing app-specific scripts and documentation are preserved under apps/security-inspector. Original public source history is preserved under docs/source-history.
+
+Environment commands consume the exact public environment-deployment Git revision recorded in Cargo.lock. Run `python3 playground/environment-planning/verify.py` for a disposable end-to-end CLI example. The example records synthetic receipts; an operational receipt needs a separate authenticated execution path.
 
 ## Windows artifact verification
 

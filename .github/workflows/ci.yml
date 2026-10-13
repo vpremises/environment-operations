@@ -25,6 +25,8 @@ jobs:
       - run: cargo +1.97 clippy --locked --workspace --all-targets --all-features -- -D warnings
       - run: cargo +1.97 test --locked --workspace --all-targets --all-features
       - run: cargo +1.97 test --locked --workspace --doc --all-features
+      - name: Verify operator commands with synthetic environment fixtures
+        run: python3 playground/environment-planning/verify.py
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: '24.15.0'

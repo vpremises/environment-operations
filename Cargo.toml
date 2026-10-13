@@ -1,5 +1,5 @@
 [workspace]
-members = ["apps/security-inspector", "playground/credential-operations", "native/windows-custody-helper"]
+members = ["apps/environment-plan", "apps/security-inspector", "playground/credential-operations", "native/windows-custody-helper"]
 resolver = "3"
 
 [profile.release]
