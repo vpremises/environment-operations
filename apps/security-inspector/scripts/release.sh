@@ -7,9 +7,9 @@ umask 077
 : "${GITHUB_REPOSITORY:?Missing repository identity}"
 : "${RELEASE_TAG:=${GITHUB_REF_NAME:?Missing release tag}}"
 : "${GITHUB_SHA:?Missing source revision}"
-[[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 1
+[[ "$RELEASE_TAG" =~ ^security-inspector-v[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 1
 version=$(sed -n 's/^version = "\([0-9]*\.[0-9]*\.[0-9]*\)"$/\1/p' Cargo.toml)
-[[ "$RELEASE_TAG" == "v$version" ]] || exit 1
+[[ "$RELEASE_TAG" == "security-inspector-v$version" ]] || exit 1
 [[ "$(git rev-parse HEAD)" == "$GITHUB_SHA" ]] || exit 1
 [[ "$(git rev-parse "$RELEASE_TAG^{commit}")" == "$GITHUB_SHA" ]] || exit 1
 git merge-base --is-ancestor "$GITHUB_SHA" origin/main
@@ -41,4 +41,5 @@ grep -Fq 'HTTP 404' "$error_file" || exit 1
 notes="Standalone Linux/WSL executable. Download the matching ZIP and SHA-256 file, verify the digest, and extract the bundle. No package registry, container runtime, or Rust installation is required. Source revision: $GITHUB_SHA."
 gh release create "$RELEASE_TAG" "${assets[@]}" \
     --repo "$GITHUB_REPOSITORY" --verify-tag \
+    --latest=false \
     --title "vpremises-security $version" --notes "$notes"
