@@ -1,0 +1,354 @@
+{
+  "repository": "vpremises/environment-operations",
+  "purpose": "Product CLI, credential playground and native helper composition over Crowsi",
+  "responsibility_boundary": "Own the named environment configuration/planning or application deployment composition. Generic security and provider mechanisms reuse their managed owners; real profiles/secrets and actual environment activation are separate.",
+  "packages": [
+    {
+      "manifest": "apps/environment-plan/Cargo.toml",
+      "package": "vpremises-environment-plan",
+      "ecosystem": "rust",
+      "description": "Operator CLI for validated environment plans and provider configuration rendering",
+      "interfaces": {
+        "lib": null,
+        "features": {},
+        "bins": [],
+        "implicit_bins": [
+          "apps/environment-plan/src/bin/incus-renderer.rs"
+        ]
+      },
+      "declared_commands": {}
+    },
+    {
+      "manifest": "apps/security-inspector/Cargo.toml",
+      "package": "vpremises-security",
+      "ecosystem": "rust",
+      "description": "Local endpoint monitoring and security reporting tool",
+      "interfaces": {
+        "lib": "apps/security-inspector/src/lib.rs",
+        "features": {},
+        "bins": [
+          {
+            "name": "vpremises-security",
+            "path": "src/main.rs"
+          }
+        ],
+        "public_modules": [
+          "oss"
+        ],
+        "public_reexports": [
+          "audit::{\n    audit, initialize_bundle, load_audit_config, read_local_document, AuditConfig,\n    BoundaryCollector, Collectors, ContentCollector, NetworkCollector, Tool,\n}",
+          "security::{security_report, CheckCoverage, SecurityReport}",
+          "execution::{\n    ExecutionContractError, ExecutionControlKindV1, ExecutionControlRequestV1,\n    ExecutionLeaseRequestV1, ExecutionLeaseV1, ExecutionOutcomeV1, ExecutionPlacementV1,\n    ExecutionResultV1, ExecutionStateV1, ProjectionReferenceV1, ValidateExecution,\n}",
+          "model::{\n    AllowedRoot, Diagnostic, ExpectedDepartmentDailyReport, MountedSharePointReportReceipt,\n    MountedSharePointReportRequest, ObservationLimits, ObservationPolicy, ObservationReport,\n    ObservationTotals, ObserverConfig, ReportAcquisitionError, ReportAllowedRoot,\n    ReportClassification, ReportRecordMode, ReportRootBase, ReportedPolicy, RootObservation,\n}",
+          "observer::observe",
+          "report::acquire as acquire_mounted_sharepoint_report"
+        ],
+        "implicit_bins": []
+      },
+      "declared_commands": {}
+    },
+    {
+      "manifest": "native/windows-custody-helper/Cargo.toml",
+      "package": "vpremises-windows-custody-helper",
+      "ecosystem": "rust",
+      "description": "Native Windows CurrentUser credential custody helper",
+      "interfaces": {
+        "lib": null,
+        "features": {},
+        "bins": [],
+        "implicit_bins": []
+      },
+      "declared_commands": {}
+    },
+    {
+      "manifest": "playground/credential-operations/Cargo.toml",
+      "package": "vpremises-credential-examples",
+      "ecosystem": "rust",
+      "description": "Explicit synthetic credential examples and fail-closed CLI boundary checks",
+      "interfaces": {
+        "lib": null,
+        "features": {},
+        "bins": [],
+        "implicit_bins": [
+          "playground/credential-operations/src/bin/crowsi-credential-demo.rs",
+          "playground/credential-operations/src/bin/crowsi-credential.rs"
+        ]
+      },
+      "declared_commands": {}
+    }
+  ],
+  "schema_definitions": [
+    "apps/security-inspector/schemas/oss-report.schema.json",
+    "apps/security-inspector/schemas/security-report.v2.schema.json",
+    "apps/security-inspector/schemas/security-report/check.schema.json",
+    "apps/security-inspector/schemas/security-report/diagnostic.schema.json",
+    "apps/security-inspector/schemas/security-report/observation.schema.json",
+    "apps/security-inspector/schemas/security-report/totals.schema.json",
+    "apps/security-inspector/schemas/vpremises.execution-control.v1.schema.json",
+    "apps/security-inspector/schemas/vpremises.execution-lease-request.v1.schema.json",
+    "apps/security-inspector/schemas/vpremises.execution-lease.v1.schema.json",
+    "apps/security-inspector/schemas/vpremises.execution-result.v1.schema.json",
+    "apps/security-inspector/schemas/vpremises.mounted-sharepoint-report-receipt.v1.schema.json",
+    "apps/security-inspector/schemas/vpremises.mounted-sharepoint-report-request.v1.schema.json",
+    "apps/security-inspector/schemas/vpremises.observer.v1.schema.json"
+  ],
+  "test_sources": [
+    "apps/environment-plan/src/bin/incus-renderer.rs",
+    "apps/environment-plan/src/main.rs",
+    "apps/security-inspector/scripts/release-request.test.mjs",
+    "apps/security-inspector/src/audit/input_tests.rs",
+    "apps/security-inspector/src/audit/mod.rs",
+    "apps/security-inspector/src/audit/process.rs",
+    "apps/security-inspector/src/audit/process_tests.rs",
+    "apps/security-inspector/src/audit/receipt_tests.rs",
+    "apps/security-inspector/src/audit/tests.rs",
+    "apps/security-inspector/src/audit/time.rs",
+    "apps/security-inspector/src/cli/audit.rs",
+    "apps/security-inspector/src/cli/mod.rs",
+    "apps/security-inspector/src/cli/tests.rs",
+    "apps/security-inspector/src/execution/helpers.rs",
+    "apps/security-inspector/src/observer/scan/directory.rs",
+    "apps/security-inspector/src/oss/cargo_manifest.rs",
+    "apps/security-inspector/src/oss/exclusions.rs",
+    "apps/security-inspector/src/oss/git.rs",
+    "apps/security-inspector/src/oss/npm_specifier.rs",
+    "apps/security-inspector/src/oss/package_manifest.rs",
+    "apps/security-inspector/src/oss/paths.rs",
+    "apps/security-inspector/src/validation/mod.rs",
+    "apps/security-inspector/src/validation/tests.rs",
+    "apps/security-inspector/tests/cases/acquisition_boundary.rs",
+    "apps/security-inspector/tests/cases/acquisition_contract.rs",
+    "apps/security-inspector/tests/cases/acquisition_limits.rs",
+    "apps/security-inspector/tests/cases/acquisition_success.rs",
+    "apps/security-inspector/tests/cases/audit.rs",
+    "apps/security-inspector/tests/cases/mod.rs",
+    "apps/security-inspector/tests/cases/observation.rs",
+    "apps/security-inspector/tests/cases/observation_contract.rs",
+    "apps/security-inspector/tests/cases/security_report.rs",
+    "apps/security-inspector/tests/cases/setup.rs",
+    "apps/security-inspector/tests/execution_contracts.rs",
+    "apps/security-inspector/tests/integration.rs",
+    "apps/security-inspector/tests/oss.rs",
+    "apps/security-inspector/tests/oss/archives.rs",
+    "apps/security-inspector/tests/oss/content.rs",
+    "apps/security-inspector/tests/oss/exclusions.rs",
+    "apps/security-inspector/tests/oss/npm_routing.rs",
+    "apps/security-inspector/tests/oss/packages.rs",
+    "apps/security-inspector/tests/oss/repository.rs",
+    "apps/security-inspector/tests/oss/repository_urls.rs",
+    "apps/security-inspector/tests/oss/support.rs",
+    "apps/security-inspector/tests/oss/workspace.rs",
+    "apps/security-inspector/tests/support/mod.rs",
+    "native/windows-custody-helper/src/main.rs",
+    "playground/credential-operations/tests/cli.rs"
+  ],
+  "example_sources": [
+    "apps/security-inspector/examples/audit.mounted.json",
+    "apps/security-inspector/examples/check-repository.rs",
+    "apps/security-inspector/examples/fixtures/department-daily-report.json",
+    "apps/security-inspector/examples/mounted-sharepoint-report.request.json",
+    "apps/security-inspector/examples/observer.repository.json",
+    "apps/security-inspector/examples/oss.gitleaks.toml",
+    "playground/credential-operations/Cargo.toml",
+    "playground/credential-operations/README.md",
+    "playground/credential-operations/src/bin/crowsi-credential-demo.rs",
+    "playground/credential-operations/src/bin/crowsi-credential.rs",
+    "playground/credential-operations/tests/cli.rs",
+    "playground/environment-planning/README.md",
+    "playground/environment-planning/environment.toml",
+    "playground/environment-planning/profiles/base.toml",
+    "playground/environment-planning/service.toml",
+    "playground/environment-planning/verify.py"
+  ],
+  "workflow_definitions": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "jobs": [
+        {
+          "job": "verify",
+          "condition": null,
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "rustup toolchain install 1.97 --profile minimal --component rustfmt --component clippy",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Verify preserved source history",
+              "run": "git bundle verify docs/source-history/vpremises-security.bundle && git bundle verify docs/source-history/vpremises-credential.bundle",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "cargo +1.97 fmt --all -- --check",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "cargo +1.97 clippy --locked --workspace --all-targets --all-features -- -D warnings",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "cargo +1.97 test --locked --workspace --all-targets --all-features",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": "cargo +1.97 test --locked --workspace --doc --all-features",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Verify operator commands with synthetic environment fixtures",
+              "run": "python3 playground/environment-planning/verify.py",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "condition": null
+            },
+            {
+              "name": "Verify native manifest source and ABI binding with synthetic inputs",
+              "run": "python3 scripts/test_windows_release_manifest.py",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Verify product release request authorization",
+              "run": "node --test apps/security-inspector/scripts/release-request.test.mjs",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/linux-bundle.yml",
+      "jobs": [
+        {
+          "job": "build",
+          "condition": null,
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Install pinned toolchain and advisory checker",
+              "run": "rustup toolchain install 1.97 --profile minimal\necho \"$HOME/.cargo/bin\" >> \"$GITHUB_PATH\"\nrustup default 1.97\necho \"CARGO_TARGET_DIR=$RUNNER_TEMP/cargo-target\" >> \"$GITHUB_ENV\"\ncargo +1.97 install cargo-audit --version 0.22.2 --locked --no-default-features --root \"$RUNNER_TEMP/audit-tools\"\necho \"CARGO_AUDIT_BIN=$RUNNER_TEMP/audit-tools/bin/cargo-audit\" >> \"$GITHUB_ENV\"\n",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Audit resolved workspace dependencies",
+              "run": "\"$CARGO_AUDIT_BIN\" audit --deny warnings",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Build and verify the standalone bundle and synthetic reports",
+              "run": "bash scripts/package.sh \"$GITHUB_WORKSPACE/dist\"",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "job": "attest",
+          "condition": "github.ref == 'refs/heads/main' && github.event_name != 'pull_request'",
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8",
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/windows-build.yml",
+      "jobs": [
+        {
+          "job": "build",
+          "condition": null,
+          "runs_on": "windows-2025",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Build helper and test synthetic runner credentials",
+              "run": "$ErrorActionPreference = 'Stop'\nrustup toolchain install 1.97 --profile minimal\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\ncargo +1.97 build --locked --release -p vpremises-windows-custody-helper --target x86_64-pc-windows-msvc\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n$env:CROWSI_WINDOWS_CUSTODY_PROVIDER_EXECUTABLE = (Resolve-Path target/x86_64-pc-windows-msvc/release/vpremises-windows-custody-helper.exe).Path\n$sdkRevision = python -c \"import tomllib; d=tomllib.load(open('native/windows-custody-helper/Cargo.toml','rb'))['dependencies']['crowsi-windows-custody-provider']; assert d['git']=='https://github.com/crowsi-net/credential-custody.git'; print(d['rev'])\"\nif ($LASTEXITCODE -ne 0 -or $sdkRevision -notmatch '^[a-f0-9]{40}$') { exit 1 }\n$sdkCheckout = Join-Path $env:RUNNER_TEMP 'reviewed-credential-sdk'\ngit init -q $sdkCheckout\ngit -C $sdkCheckout fetch -q --depth 1 https://github.com/crowsi-net/credential-custody.git $sdkRevision\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\ngit -C $sdkCheckout checkout -q --detach FETCH_HEAD\nif ((git -C $sdkCheckout rev-parse HEAD) -ne $sdkRevision) { exit 1 }\nPush-Location $sdkCheckout\ntry {\n  cargo +1.97 test --locked -p crowsi-windows-custody-provider --test helper-identity\n  if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n  cargo +1.97 test --locked -p crowsi-windows-custody-provider --test windows-dpapi-live -- --ignored\n  if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n} finally { Pop-Location }\nNew-Item -ItemType Directory -Force dist | Out-Null\nCopy-Item $env:CROWSI_WINDOWS_CUSTODY_PROVIDER_EXECUTABLE,LICENSE,NOTICE dist\n& ./scripts/dependency-notices.ps1\nCompress-Archive -Path dist/* -DestinationPath windows-custody.zip\npython scripts/windows-release-manifest.py create --archive windows-custody.zip --binary dist/vpremises-windows-custody-helper.exe --source-sha $env:GITHUB_SHA --manifest windows-custody-manifest.json\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\npython scripts/windows-release-manifest.py verify --archive windows-custody.zip --source-sha $env:GITHUB_SHA --manifest windows-custody-manifest.json\nif ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }\n",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "condition": null
+            }
+          ]
+        },
+        {
+          "job": "attest",
+          "condition": "github.ref == 'refs/heads/main' && github.repository == 'vpremises/environment-operations'",
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+              "condition": null
+            },
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8",
+              "condition": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence_policy": "Declarations and source paths are not proof of an executed acceptance. Exact CI head and result are recorded separately. No live accounts or production acceptance is inferred."
+}

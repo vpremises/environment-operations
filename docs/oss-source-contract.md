@@ -39,3 +39,31 @@ Use the package scripts/owner CI above and the repository README for exact comma
 ## Acceptance record
 
 Inventory baseline source: `c5d272c1b3d6155bcf974cf21773a101112e4e0a`. This baseline records observed files and declared interfaces, not a completed audit. Subsequent source changes are accepted at their exact commit with test evidence. Production hosting, account login, secret custody installation and data migration remain outside source-only acceptance.
+
+## Owned source and acceptance map
+
+[oss-source-map.json](oss-source-map.json) is the tracked map of package
+interfaces, declared commands, schemas, functional test sources, examples and CI
+jobs. It keeps each responsibility attached to its actual physical source owner.
+Public exports are supported only within this repository's responsibility boundary;
+a filename or schema declaration does not grant product or cloud authority.
+
+| Package | Canonical manifest | Responsibility/interface |
+| --- | --- | --- |
+| `vpremises-environment-plan` | [apps/environment-plan/Cargo.toml](../apps/environment-plan/Cargo.toml) | Operator CLI for validated environment plans and provider configuration rendering |
+| `vpremises-security` | [apps/security-inspector/Cargo.toml](../apps/security-inspector/Cargo.toml) | Local endpoint monitoring and security reporting tool |
+| `vpremises-windows-custody-helper` | [native/windows-custody-helper/Cargo.toml](../native/windows-custody-helper/Cargo.toml) | Native Windows CurrentUser credential custody helper |
+| `vpremises-credential-examples` | [playground/credential-operations/Cargo.toml](../playground/credential-operations/Cargo.toml) | Explicit synthetic credential examples and fail-closed CLI boundary checks |
+
+For source acceptance, run each applicable functional CI job with the committed
+locks from an independent checkout. Match public entrypoints to their test/example
+sources in the map; test the relevant invalid input and failure boundary as well as
+the normal path. Policy-only, skipped and credential-dependent jobs do not establish
+functional coverage. Release jobs establish artifact acceptance only when actually
+run at the reviewed commit. A source-only/example repository must not be presented
+as a complete external service or a released package.
+
+Schema definitions in the map remain owned by their canonical validator and
+consumers. An absent schema file means no separate schema file is declared; it does
+not mean the runtime interface has no validation. Do not introduce another common
+schema solely to mirror an implementation type.
