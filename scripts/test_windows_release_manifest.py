@@ -39,7 +39,7 @@ class ReleaseManifest(unittest.TestCase):
 
     def test_archive_binds_current_packages_contract_and_binary(self):
         result = self.create()
-        self.assertEqual(result["helper"]["version"], "0.10.0")
+        self.assertEqual(result["helper"]["version"], "0.10.1")
         self.assertEqual(result["provider"]["version"], "0.10.2")
         self.assertEqual(result["abi"]["contracts"]["protocol"], "crowsi-windows-custody-v1")
         self.assertEqual(result["abi"]["contracts"]["operation_request_schema"],
