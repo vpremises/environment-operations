@@ -1,0 +1,63 @@
+name: Verify standalone Linux bundle
+on:
+  push:
+    branches: [main]
+    paths: ['apps/security-inspector/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/linux-bundle.yml']
+  pull_request:
+    paths: ['apps/security-inspector/**', 'Cargo.toml', 'Cargo.lock', '.github/workflows/linux-bundle.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      CARGO_INCREMENTAL: '0'
+      CARGO_BUILD_JOBS: '2'
+    outputs:
+      artifact-id: ${{ steps.artifact.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          persist-credentials: false
+      - name: Install pinned toolchain and advisory checker
+        run: |
+          rustup toolchain install 1.97 --profile minimal
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          rustup default 1.97
+          echo "CARGO_TARGET_DIR=$RUNNER_TEMP/cargo-target" >> "$GITHUB_ENV"
+          cargo +1.97 install cargo-audit --version 0.22.2 --locked --no-default-features --root "$RUNNER_TEMP/audit-tools"
+          echo "CARGO_AUDIT_BIN=$RUNNER_TEMP/audit-tools/bin/cargo-audit" >> "$GITHUB_ENV"
+      - name: Audit resolved workspace dependencies
+        run: '"$CARGO_AUDIT_BIN" audit --deny warnings'
+      - name: Build and verify the standalone bundle and synthetic reports
+        working-directory: apps/security-inspector
+        run: bash scripts/package.sh "$GITHUB_WORKSPACE/dist"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        id: artifact
+        with:
+          name: security-inspector-linux
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+  attest:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact-id }}
+          merge-multiple: true
+          path: dist
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8
+        with:
+          subject-path: |
+            dist/*.zip
+            dist/*.tar.gz

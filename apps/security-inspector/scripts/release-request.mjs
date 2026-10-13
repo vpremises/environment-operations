@@ -3,9 +3,9 @@ import { pathToFileURL } from 'node:url';
 
 export function releaseRequest(request, actor, revision, manifest) {
   if (actor !== 'coela-oss') throw new Error('Unauthorized release requester');
-  const match = /^\/release (v[0-9]+\.[0-9]+\.[0-9]+) ([a-f0-9]{40})$/.exec(request);
+  const match = /^\/release (security-inspector-v[0-9]+\.[0-9]+\.[0-9]+) ([a-f0-9]{40})$/.exec(request);
   const version = /^version = "([0-9]+\.[0-9]+\.[0-9]+)"$/m.exec(manifest)?.[1];
-  if (!match || match[0] !== request || !version || match[1] !== `v${version}` || match[2] !== revision) {
+  if (!match || match[0] !== request || !version || match[1] !== `security-inspector-v${version}` || match[2] !== revision) {
     throw new Error('Release must select the declared version and exact current source');
   }
   return { tag: match[1], revision: match[2] };

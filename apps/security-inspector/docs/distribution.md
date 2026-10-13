@@ -1,7 +1,7 @@
 # Standalone Linux/WSL executable
 
 Download the Linux x64 ZIP and adjacent SHA-256 file from
-[GitHub Releases](https://github.com/vpremises/vpremises-security/releases).
+[GitHub Releases](https://github.com/vpremises/environment-operations/releases).
 No native Windows build, package registry, container runtime or Rust installation
 is required to run the main executable. Ubuntu 24.04-compatible glibc is required.
 The ZIP includes the exact reviewed Zixcel/Crowsi ELF collectors and SHA-pinned
@@ -9,7 +9,7 @@ Gitleaks engine. No compiler, Git checkout or runtime download is needed for
 directory auditing. JSON setup scripts use the standard Ubuntu `jq` utility.
 
 ```sh
-version=0.1.3
+version=0.1.4
 archive=vpremises-security-${version}-x86_64-unknown-linux-gnu.zip
 printf '%s  %s\n' "$(tr -d '\r\n' < "$archive.sha256")" "$archive" | sha256sum --check --strict
 unzip "$archive" -d vpremises-security
@@ -33,13 +33,9 @@ The bundle contains executable tools, source/version manifests, checksums,
 third-party notices, schemas and usage documentation. All source revisions and
 engine archive digests are fixed in `scripts/collectors.json`.
 
-Merge reviewed source through protected main-branch PR checks. Push an approved
-`v<version>` tag on that main revision to run `Standalone Release`. A manual
-workflow invocation on the same tag is also supported. The workflow builds and
-verifies the bundle before publishing a GitHub Release, verifies its manifest
-revision/version/target and refuses to change an existing release. It never
-creates or moves a tag. Only the publish job has `contents: write`, using the
-short-lived `GITHUB_TOKEN`. No GHCR or registry credentials are used.
+Merge reviewed source through protected main-branch PR checks. The `linux-bundle.yml` workflow builds and verifies the executable bundle; main artifacts receive GitHub OIDC build provenance. Pull requests do not receive attestation permissions. An owner must independently verify the exact repo/workflow/source/ref and artifact hashes before promotion.
+
+Use the component tag `security-inspector-v<version>` on that exact main revision. The owner promotes reviewed artifacts to a GitHub Release; this workflow does not publish automatically. Existing releases or a tag on another source are rejected by the promotion helper. Component releases use explicit tags rather than a shared monorepo `latest` download URL.
 
 CI uses real collectors with harmless synthetic disclosure and boundary fixtures.
 This verifies tool operation, not the runner's overall security or real host
@@ -47,4 +43,4 @@ isolation. Review the downloaded release's checksum and `SHA256SUMS`, then run
 `doctor`, `init` and an explicitly configured audit on the deployment machine.
 Reports and private settings must stay outside the extracted bundle.
 
-An authorized `coela-oss` operator may also request publication on a repository PR with `/release v<version> <exact-main-sha>`. The request must select the current main source and its declared package version. The promotion workflow reruns the complete product/bundle CI, creates an immutable tag on that exact source using the short-lived workflow token, and invokes the same verified release script. Existing tags on another source and existing releases are rejected. Local registry or GitHub credentials are not needed.
+The release-request parser requires an authorized owner and `/release security-inspector-v<version> <exact-main-sha>`. It validates a request; no automatic comment-triggered publisher is installed in this repository. Actual promotion uses the reviewed artifact and explicit component tag.
