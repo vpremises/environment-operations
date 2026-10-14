@@ -26,3 +26,5 @@ Environment commands consume the exact public environment-deployment Git revisio
 The owner-local windows-build workflow builds the product helper, checks the exact public SDK revision in an ephemeral checkout, tests randomly named synthetic CurrentUser credentials on a fresh Windows runner, verifies source/version/PE/ABI/digests and preserves dependency notices. Main artifacts receive GitHub OIDC build provenance; pull requests do not receive attestation privileges. This does not prove WSL acceptance, customer credential enrollment or Windows Authenticode signing.
 
 [OSS responsibility and source completion](docs/oss-source-contract.md) defines the supported package boundary and required acceptance. It does not declare unexecuted source, distribution or production checks complete.
+
+Dependency updates: [repository policy](docs/dependency-updates.md).
