@@ -12,5 +12,5 @@ default-run = "crowsi-credential"
 
 [dependencies]
 crowsi-credential-broker = { version = "=0.1.1", git = "https://github.com/crowsi-net/credential-custody.git", rev = "bd11b5e827fd9760181722a1bd1761a77fa8dacc" }
-getrandom = "0.3.4"
+getrandom = "0.4.3"
 serde_json = "1.0.145"

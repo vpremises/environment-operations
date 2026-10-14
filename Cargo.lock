@@ -936,7 +936,7 @@ name = "vpremises-credential-examples"
 version = "0.1.0"
 dependencies = [
  "crowsi-credential-broker",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "serde_json",
 ]
 
