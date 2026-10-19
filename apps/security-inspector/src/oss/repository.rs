@@ -24,10 +24,9 @@ pub fn inspect_repository(
     git::validate_root(&root)?;
     let policy = super::policy(&root, policy_path)?;
     let mut report = OssReport::new("repository");
-    report.evidence_sha256.push(format!(
-        "{:x}",
-        Sha256::digest(serde_json::to_vec(&policy).map_err(|_| "policy-invalid")?)
-    ));
+    report.evidence_sha256.push(hex::encode(Sha256::digest(
+        serde_json::to_vec(&policy).map_err(|_| "policy-invalid")?,
+    )));
     for name in REQUIRED {
         document::required(&root, name, "required-community-file-missing", &mut report);
     }
@@ -35,7 +34,7 @@ pub fn inspect_repository(
         Ok(names) => {
             report
                 .evidence_sha256
-                .push(format!("{:x}", Sha256::digest(names.join("\0"))));
+                .push(hex::encode(Sha256::digest(names.join("\0"))));
             for name in names {
                 if paths::forbidden(&name, &policy) {
                     report.finding("tracked-private-or-generated-path", &name);

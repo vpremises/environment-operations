@@ -18,7 +18,7 @@ pub(super) fn check(
     let bytes = document::read(path, 64 * 1024 * 1024)?;
     report
         .evidence_sha256
-        .push(format!("{:x}", Sha256::digest(&bytes)));
+        .push(hex::encode(Sha256::digest(&bytes)));
     let expanded = super::archive_stream::expand(&bytes)?;
     let mut tar = tar::Archive::new(expanded.as_slice());
     let entries = tar.entries().map_err(|_| "archive-invalid")?;

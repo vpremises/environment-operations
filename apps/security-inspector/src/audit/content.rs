@@ -81,10 +81,9 @@ pub(super) fn summarize(
             .checked_add(missing)
             .ok_or("collector-count-overflow")?;
         // Retain only receipt hashes, never up to 256 full private receipts.
-        let digest = format!(
-            "{:x}",
-            Sha256::digest(serde_json::to_vec(&value).map_err(|_| "collector-invalid-output")?)
-        );
+        let digest = hex::encode(Sha256::digest(
+            serde_json::to_vec(&value).map_err(|_| "collector-invalid-output")?,
+        ));
         evidence.push(json!({"receipt_sha256":digest}));
     }
     let status = if gaps > 0 {

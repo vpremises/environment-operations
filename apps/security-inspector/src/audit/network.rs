@@ -22,7 +22,7 @@ pub(super) fn collect(
         .as_ref()
         .map(|path| {
             let bytes = io::read(path, 1_048_576)?;
-            let digest = format!("{:x}", Sha256::digest(&bytes));
+            let digest = hex::encode(Sha256::digest(&bytes));
             let copy = scratch.0.join("baseline.json");
             io::output(&copy)?
                 .write_all(&bytes)

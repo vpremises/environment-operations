@@ -34,7 +34,7 @@ pub fn initialize_bundle(bundle: &Path, output: &Path, root: &Path) -> Result<()
     ] {
         let path = bundle.join("tools").join(name);
         let bytes = io::read(&path, 64 * 1024 * 1024)?;
-        let digest = format!("{:x}", Sha256::digest(&bytes));
+        let digest = hex::encode(Sha256::digest(&bytes));
         if !bytes.starts_with(b"\x7fELF") || manifest["tools"][name]["sha256"] != digest {
             return Err("bundle-tool-pin-mismatch");
         }

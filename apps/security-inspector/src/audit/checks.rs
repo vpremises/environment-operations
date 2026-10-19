@@ -31,10 +31,9 @@ pub(super) fn check(
         finding_count: findings,
         gap_count: gaps,
         evidence_sha256: evidence.map(|v| {
-            format!(
-                "{:x}",
-                Sha256::digest(serde_json::to_vec(v).expect("collector evidence serializes"))
-            )
+            hex::encode(Sha256::digest(
+                serde_json::to_vec(v).expect("collector evidence serializes"),
+            ))
         }),
     }
 }

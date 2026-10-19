@@ -35,10 +35,9 @@ pub fn audit(config: &AuditConfig, environment: &str) -> Result<SecurityReport, 
     let mut report = security_report(&config.observer, environment)?;
     let budget = budget::Budget::new(config.collector_budget_seconds)?;
     report.schema = "vpremises-security/report/v2";
-    report.configuration_sha256 = format!(
-        "{:x}",
-        Sha256::digest(serde_json::to_vec(config).map_err(|_| "audit-config-invalid")?)
-    );
+    report.configuration_sha256 = hex::encode(Sha256::digest(
+        serde_json::to_vec(config).map_err(|_| "audit-config-invalid")?,
+    ));
     let mut checks = vec![report.checks.remove(0)];
     let content = config.collectors.content.as_ref().map_or_else(
         || {
