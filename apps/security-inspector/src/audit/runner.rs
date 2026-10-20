@@ -40,7 +40,7 @@ pub(super) fn run(
         .map_err(|_| "tool-unavailable")?;
     if bytes.len() > 64 * 1024 * 1024
         || !bytes.starts_with(b"\x7fELF")
-        || format!("{:x}", Sha256::digest(&bytes)) != tool.sha256
+        || hex::encode(Sha256::digest(&bytes)) != tool.sha256
     {
         return Err("tool-pin-mismatch");
     }

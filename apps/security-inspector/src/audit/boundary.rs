@@ -22,7 +22,7 @@ pub(super) fn collect(
         return Err("boundary-observation-stale");
     }
     let bytes = io::read(&config.input, 131_072)?;
-    if format!("{:x}", Sha256::digest(&bytes)) != config.input_sha256 {
+    if hex::encode(Sha256::digest(&bytes)) != config.input_sha256 {
         return Err("boundary-input-pin-mismatch");
     }
     let document: serde_json::Value =

@@ -24,7 +24,7 @@ fn setup_pins_bundle_and_creates_private_unconfigured_settings() {
         fs::write(bundle.join("tools").join(name), bytes).unwrap();
         tools.insert(
             name.into(),
-            json!({"sha256":format!("{:x}", Sha256::digest(bytes))}),
+            json!({"sha256":hex::encode(Sha256::digest(bytes))}),
         );
     }
     fs::write(

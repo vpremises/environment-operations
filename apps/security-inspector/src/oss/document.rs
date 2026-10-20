@@ -11,7 +11,7 @@ pub(super) fn load(path: &Path, report: &mut OssReport) -> Result<Value, &'stati
     let bytes = read(path, 1_048_576)?;
     report
         .evidence_sha256
-        .push(format!("{:x}", Sha256::digest(&bytes)));
+        .push(hex::encode(Sha256::digest(&bytes)));
     let value = if path.extension().is_some_and(|s| s == "toml")
         || (path.file_name().is_some_and(|s| s == "config")
             && path

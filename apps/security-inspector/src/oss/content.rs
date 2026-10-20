@@ -65,10 +65,9 @@ pub fn audit_archive_content(
     if content.finding_count > 0 {
         report.finding("archive-content-findings", "");
     }
-    report.evidence_sha256.push(format!(
-        "{:x}",
-        Sha256::digest(serde_json::to_vec(&content).map_err(|_| "content-receipt-invalid")?)
-    ));
+    report.evidence_sha256.push(hex::encode(Sha256::digest(
+        serde_json::to_vec(&content).map_err(|_| "content-receipt-invalid")?,
+    )));
     report.status = if !report.uninspected.is_empty() {
         "incomplete"
     } else if !report.findings.is_empty() {
@@ -79,8 +78,8 @@ pub fn audit_archive_content(
     Ok(())
 }
 fn hash(path: &Path) -> Result<String, &'static str> {
-    Ok(format!(
-        "{:x}",
-        Sha256::digest(document::read(path, 64 * 1024 * 1024)?)
-    ))
+    Ok(hex::encode(Sha256::digest(document::read(
+        path,
+        64 * 1024 * 1024,
+    )?)))
 }

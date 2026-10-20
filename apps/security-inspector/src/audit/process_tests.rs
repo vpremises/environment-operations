@@ -9,7 +9,7 @@ use std::{
 fn tool(path: &str, seconds: u64) -> Tool {
     Tool {
         executable: path.into(),
-        sha256: format!("{:x}", Sha256::digest(std::fs::read(path).unwrap())),
+        sha256: hex::encode(Sha256::digest(std::fs::read(path).unwrap())),
         timeout_seconds: seconds,
     }
 }

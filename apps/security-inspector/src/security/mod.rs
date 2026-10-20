@@ -21,7 +21,7 @@ pub fn security_report(
     }
     let started_at_unix_ms = timestamp()?;
     let bytes = serde_json::to_vec(config).map_err(|_| "configuration cannot be serialized")?;
-    let configuration_sha256 = format!("{:x}", Sha256::digest(&bytes));
+    let configuration_sha256 = hex::encode(Sha256::digest(&bytes));
     let observation = observe(config);
     let mut checks = vec![CheckCoverage {
         id: "filesystem-metadata",

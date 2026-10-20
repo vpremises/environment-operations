@@ -19,6 +19,6 @@ pub(super) fn validate(settings: &Path, report: &mut OssReport) -> Result<(), &'
     }
     report
         .evidence_sha256
-        .push(format!("{:x}", Sha256::digest(bytes)));
+        .push(hex::encode(Sha256::digest(bytes)));
     Ok(())
 }
