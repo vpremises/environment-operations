@@ -9,7 +9,7 @@ Gitleaks engine. No compiler, Git checkout or runtime download is needed for
 directory auditing. JSON setup scripts use the standard Ubuntu `jq` utility.
 
 ```sh
-version=0.1.4
+version=0.1.5
 archive=vpremises-security-${version}-x86_64-unknown-linux-gnu.zip
 printf '%s  %s\n' "$(tr -d '\r\n' < "$archive.sha256")" "$archive" | sha256sum --check --strict
 unzip "$archive" -d vpremises-security
@@ -44,3 +44,18 @@ isolation. Review the downloaded release's checksum and `SHA256SUMS`, then run
 Reports and private settings must stay outside the extracted bundle.
 
 The release-request parser requires an authorized owner and `/release security-inspector-v<version> <exact-main-sha>`. It validates a request; no automatic comment-triggered publisher is installed in this repository. Actual promotion uses the reviewed artifact and explicit component tag.
+
+## Detector ownership
+
+The product consumes Zixcel’s immutable published detector, rather than rebuilding
+its historical Go recipe. The exact owner source, archive/executable hashes and
+Go runtime build are pinned in `scripts/collectors.json`; the owner pin must agree
+before any detector is accepted. The owner fetch helper verifies GitHub build
+provenance, and its audit helper rechecks the actual published binary against the
+current vulnerability database. Product packaging reuses the owner’s bounded
+Rust provisioner to preserve licenses and reject malformed archives.
+
+A fresh binary audit is required for every bundle build. Failure retains the
+structured finding/inventory evidence and stops packaging; no advisory allowlist
+or module-only fallback is added. Go is used only by the owner’s CI audit tool,
+not to rebuild the detector or as an installed product dependency.
