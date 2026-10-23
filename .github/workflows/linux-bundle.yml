@@ -71,3 +71,21 @@ jobs:
           subject-path: |
             dist/*.zip
             dist/*.tar.gz
+      - name: Verify the exact main bundle provenance before owner promotion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir verified-provenance
+          for archive in dist/*.zip dist/*.tar.gz; do
+            gh attestation verify "$archive" --repo "$GITHUB_REPOSITORY" \
+              --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/linux-bundle.yml" \
+              --source-digest "$GITHUB_SHA" --signer-digest "$GITHUB_SHA" \
+              --source-ref refs/heads/main --deny-self-hosted-runners --format json \
+              > "verified-provenance/$(basename "$archive").json"
+          done
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: inspector-verified-provenance-${{ github.sha }}
+          path: verified-provenance/
+          if-no-files-found: error
+          retention-days: 14

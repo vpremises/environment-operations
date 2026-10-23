@@ -33,7 +33,7 @@ The bundle contains executable tools, source/version manifests, checksums,
 third-party notices, schemas and usage documentation. All source revisions and
 engine archive digests are fixed in `scripts/collectors.json`.
 
-Merge reviewed source through protected main-branch PR checks. The `linux-bundle.yml` workflow builds and verifies the executable bundle; main artifacts receive GitHub OIDC build provenance. Pull requests do not receive attestation permissions. An owner must independently verify the exact repo/workflow/source/ref and artifact hashes before promotion.
+Merge reviewed source through protected main-branch PR checks. The `linux-bundle.yml` workflow builds and verifies the executable bundle; main artifacts receive GitHub OIDC build provenance. The main job also verifies archive attestations against the exact repository, workflow, main ref and source digest and retains the verification output. Pull requests do not receive attestation permissions. An owner must independently verify the exact repo/workflow/source/ref and artifact hashes before promotion.
 
 Use the component tag `security-inspector-v<version>` on that exact main revision. The owner promotes reviewed artifacts to a GitHub Release; this workflow does not publish automatically. Existing releases or a tag on another source are rejected by the promotion helper. Component releases use explicit tags rather than a shared monorepo `latest` download URL.
 
