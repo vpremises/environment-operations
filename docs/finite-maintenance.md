@@ -63,7 +63,8 @@ The operator must review the source/artifact and target meaning; confirmation is
 local consent and does not establish external execution authorization.
 
 The ledger's existing absolute parent must be physical, current-user-owned and
-0700. DB and sidecars must be owned single-link regular 0600 files. No mode repair
+0700. Ancestors must be root/current-user-owned; shared writable ancestors
+require the sticky bit. DB and sidecars must be owned single-link regular 0600 files. No mode repair
 or adoption of shared/foreign state occurs. Product `plan` and `record` now use
 the same private ledger constructor, preserving their existing reconciliation
 rows. Legacy local files must be inspected and deliberately secured by their

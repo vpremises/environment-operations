@@ -1031,7 +1031,7 @@ dependencies = [
 [[package]]
 name = "vpremises-environment-deployment"
 version = "0.3.0"
-source = "git+https://github.com/vpremises/environment-deployment?rev=e070abc7541c4eaefcf7c484b7c61921670258ba#e070abc7541c4eaefcf7c484b7c61921670258ba"
+source = "git+https://github.com/vpremises/environment-deployment?rev=b37e1f9770680c9515c4f940e0b16a95b6e965a8#b37e1f9770680c9515c4f940e0b16a95b6e965a8"
 dependencies = [
  "hex",
  "rusqlite",
@@ -1060,7 +1060,7 @@ dependencies = [
 [[package]]
 name = "vpremises-incus-driver"
 version = "0.3.0"
-source = "git+https://github.com/vpremises/environment-deployment?rev=e070abc7541c4eaefcf7c484b7c61921670258ba#e070abc7541c4eaefcf7c484b7c61921670258ba"
+source = "git+https://github.com/vpremises/environment-deployment?rev=b37e1f9770680c9515c4f940e0b16a95b6e965a8#b37e1f9770680c9515c4f940e0b16a95b6e965a8"
 dependencies = [
  "serde",
  "serde_json",
