@@ -21,6 +21,11 @@ CI verifies synthetic inputs, builds Windows helper artifacts and attests main a
 
 Environment commands consume the exact public environment-deployment Git revision recorded in Cargo.lock. Run `python3 playground/environment-planning/verify.py` for a disposable end-to-end CLI example. The example records synthetic receipts; an operational receipt needs a separate authenticated execution path.
 
+Environment-plan 0.3.0 also exposes the [finite local maintenance lifecycle](docs/finite-maintenance.md):
+plan, explicit terminal consent, one-use reservation, stop/revoke, status and
+independent readback. It reuses the environment core ledger and Zixcel bounded
+physical intake. It grants no host/provider authority and enables no timer.
+
 ## Windows artifact verification
 
 The owner-local windows-build workflow builds the product helper, checks the exact public SDK revision in an ephemeral checkout, tests randomly named synthetic CurrentUser credentials on a fresh Windows runner, verifies source/version/PE/ABI/digests and preserves dependency notices. Main artifacts receive GitHub OIDC build provenance; pull requests do not receive attestation privileges. This does not prove WSL acceptance, customer credential enrollment or Windows Authenticode signing.
