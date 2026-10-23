@@ -132,7 +132,7 @@ fn control(command: &str, ledger: &str, file: &str) -> Result<()> {
     let context = owned_context(&candidate)?;
     let now = now()?;
     let mut ledger = Ledger::open_private(ledger)?;
-    let status = match command.as_str() {
+    let status = match command {
         "maintenance-stop" => {
             ledger.stop_maintenance(&candidate.plan.id, &candidate.plan_sha256, &context, now)?
         }

@@ -70,7 +70,10 @@ pub fn local_identity() -> Result<(String, String)> {
     }
     Ok((
         format!("unix-uid:{}", rustix::process::geteuid().as_raw()),
-        format!("machine-id-sha256:{:x}", Sha256::digest(machine.as_bytes())),
+        format!(
+            "machine-id-sha256:{}",
+            hex::encode(Sha256::digest(machine.as_bytes()))
+        ),
     ))
 }
 
@@ -111,7 +114,7 @@ fn hash_file(path: &str, limit: u64) -> Result<String> {
         }
         hasher.update(&buffer[..count]);
     }
-    Ok(format!("{:x}", hasher.finalize()))
+    Ok(hex::encode(hasher.finalize()))
 }
 
 pub fn confirm(candidate: &Candidate) -> Result<()> {

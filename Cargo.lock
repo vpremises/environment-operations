@@ -1047,6 +1047,7 @@ dependencies = [
 name = "vpremises-environment-plan"
 version = "0.3.0"
 dependencies = [
+ "hex",
  "rustix",
  "serde",
  "serde_json",
