@@ -19,8 +19,30 @@ jobs:
         with:
           persist-credentials: false
       - run: rustup toolchain install 1.97 --profile minimal --component rustfmt --component clippy
-      - name: Verify preserved source history
-        run: git bundle verify docs/source-history/vpremises-security.bundle && git bundle verify docs/source-history/vpremises-credential.bundle
+      - name: Verify current owner provenance without restoring retired repositories
+        run: |
+          python3 - <<'PYCODE'
+          import json, os, re, subprocess
+          from pathlib import Path, PurePosixPath
+          record = Path('source-consolidation.json')
+          assert record.is_file() and not record.is_symlink() and record.stat().st_size <= 65536
+          data = json.loads(record.read_text())
+          assert data['owner_repository'] == os.environ['GITHUB_REPOSITORY']
+          for component in data.get('components', []):
+              assert component['owner_repository'] == data['owner_repository']
+              assert re.fullmatch(r'[0-9a-f]{40}', component['source_head'])
+              path = PurePosixPath(component['subpath'])
+              assert not path.is_absolute() and '..' not in path.parts
+              assert (Path('.') / path).is_dir()
+              assert not {'history_archive', 'history_ref', 'local_history_ref'} & component.keys()
+          if not data.get('components'):
+              assert re.fullmatch(r'[0-9a-f]{40}', data['source_sha'])
+          assert 'canonical_history_bundle' not in data
+          paths = subprocess.check_output(['git', 'ls-files', '-z'], timeout=10).decode().split('\0')
+          assert len(paths) <= 8192
+          assert not any(p.endswith('.bundle') or 'source-history' in PurePosixPath(p).parts for p in paths if p)
+          print('Current owner provenance verified; no historical repository restoration')
+          PYCODE
       - run: cargo +1.97 fmt --all -- --check
       - run: cargo +1.97 clippy --locked --workspace --all-targets --all-features -- -D warnings
       - run: cargo +1.97 test --locked --workspace --all-targets --all-features
