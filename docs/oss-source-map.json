@@ -172,7 +172,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
               "condition": null
             },
             {
@@ -182,8 +182,8 @@
               "condition": null
             },
             {
-              "name": "Verify preserved source history",
-              "run": "git bundle verify docs/source-history/vpremises-security.bundle && git bundle verify docs/source-history/vpremises-credential.bundle",
+              "name": "Verify current owner provenance without restoring retired repositories",
+              "run": "python3 - <<'PYCODE'\nimport json, os, re, subprocess\nfrom pathlib import Path, PurePosixPath\nrecord = Path('source-consolidation.json')\nassert record.is_file() and not record.is_symlink() and record.stat().st_size <= 65536\ndata = json.loads(record.read_text())\nassert data['owner_repository'] == os.environ['GITHUB_REPOSITORY']\nfor component in data.get('components', []):\n    assert component['owner_repository'] == data['owner_repository']\n    assert re.fullmatch(r'[0-9a-f]{40}', component['source_head'])\n    path = PurePosixPath(component['subpath'])\n    assert not path.is_absolute() and '..' not in path.parts\n    assert (Path('.') / path).is_dir()\n    assert not {'history_archive', 'history_ref', 'local_history_ref'} & component.keys()\nif not data.get('components'):\n    assert re.fullmatch(r'[0-9a-f]{40}', data['source_sha'])\nassert 'canonical_history_bundle' not in data\npaths = subprocess.check_output(['git', 'ls-files', '-z'], timeout=10).decode().split('\\0')\nassert len(paths) <= 8192\nassert not any(p.endswith('.bundle') or 'source-history' in PurePosixPath(p).parts for p in paths if p)\nprint('Current owner provenance verified; no historical repository restoration')\nPYCODE\n",
               "uses": null,
               "condition": null
             },
@@ -220,7 +220,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "uses": "actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
               "condition": null
             },
             {
@@ -250,7 +250,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
               "condition": null
             },
             {
@@ -274,7 +274,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "uses": "actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9",
               "condition": null
             }
           ]
@@ -287,7 +287,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+              "uses": "actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
               "condition": null
             },
             {
@@ -311,7 +311,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
               "condition": null
             },
             {
@@ -323,7 +323,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "uses": "actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9",
               "condition": null
             }
           ]
@@ -336,7 +336,7 @@
             {
               "name": null,
               "run": null,
-              "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+              "uses": "actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
               "condition": null
             },
             {

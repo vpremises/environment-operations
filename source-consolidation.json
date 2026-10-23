@@ -1,0 +1,23 @@
+{
+  "schema": "source-consolidation-v1",
+  "owner_repository": "vpremises/environment-operations",
+  "components": [
+    {
+      "id": "vpremises-credential",
+      "original_repository": "vpremises/vpremises-credential",
+      "source_head": "b329f0ddfca44497a06abb56b23efb47428be7fc",
+      "subpath": "playground/credential-operations",
+      "owner_repository": "vpremises/environment-operations",
+      "retired_archive_sha256": "57f91e8d56f93d5ef8984c7a1cf07ea4603540856cc1649a15c1c7905f1e4664"
+    },
+    {
+      "id": "vpremises-security",
+      "original_repository": "vpremises/vpremises-security",
+      "source_head": "9c95647ce3ba4dd0862afad569f5ce42cd760850",
+      "subpath": "apps/security-inspector",
+      "owner_repository": "vpremises/environment-operations",
+      "retired_archive_sha256": "0a4be4130c50223c201ad9204f5e8822b104c85956011f596fae1cd2019ba7f3"
+    }
+  ],
+  "status": "Current source is maintained only in this owner. Original repository/revision and retired archive digest are provenance only; archive restoration is retired. Current manifests and owner workflows define publication; public availability is verified separately."
+}
