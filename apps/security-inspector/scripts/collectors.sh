@@ -19,23 +19,12 @@ while IFS=$'\t' read -r name repository revision; do
         cargo fetch --locked --manifest-path "$checkout/Cargo.toml"
         "$CARGO_AUDIT_BIN" audit --no-fetch --deny warnings --file "$checkout/Cargo.lock"
     fi
-    if [[ "$name" == zixcel-repository-security ]]; then
-        bash "$checkout/scripts/build-gitleaks.sh" "$stage/engine"
-        install -m 755 "$stage/engine/gitleaks" "$stage/tools/gitleaks"
-        mkdir "$stage/licenses/collectors/gitleaks"
-        cp "$stage/engine/LICENSE" "$stage/engine/Go-runtime-LICENSE" "$stage/licenses/collectors/gitleaks/"
-        cp -r "$stage/engine/licenses" "$stage/licenses/collectors/gitleaks/dependencies"
-        cp "$stage/engine/gitleaks_8.30.1_hardened_linux_x64.tar.gz" "$stage/engine.tgz"
-        jq -s '{scanner:.[0].config.scanner_version,database:.[0].config.db,
-            database_last_modified:.[0].config.db_last_modified,
-            affected_compiled_packages:([.[]|select(.finding.trace[0].package)]|length),
-            module_notices:([.[]|select(.finding and (.finding.trace[0].package==null))|.finding.osv]|unique)}' \
-            "$stage/engine/vulnerabilities.jsonl" > "$stage/licenses/collectors/gitleaks/ENGINE-SECURITY.json"
-        rm -rf -- "$stage/engine"
-    fi
     # Use each helper's lockfile and reviewed toolchain; no shared workspace paths.
     (cd "$checkout" && cargo build --locked --release --target x86_64-unknown-linux-gnu --bin "$name")
     install -m 0755 "$CARGO_TARGET_DIR/x86_64-unknown-linux-gnu/release/$name" "$stage/tools/$name"
+    if [[ "$name" == zixcel-repository-security ]]; then
+        bash scripts/provision-detector.sh "$checkout" "$stage"
+    fi
     notice="$stage/licenses/collectors/$name"
     mkdir "$notice"
     for file in LICENSE LICENSE-MIT NOTICE THIRD_PARTY_NOTICES.md; do

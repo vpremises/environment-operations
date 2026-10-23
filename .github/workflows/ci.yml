@@ -47,6 +47,8 @@ jobs:
       - run: cargo +1.97 clippy --locked --workspace --all-targets --all-features -- -D warnings
       - run: cargo +1.97 test --locked --workspace --all-targets --all-features
       - run: cargo +1.97 test --locked --workspace --doc --all-features
+      - name: Verify detector pin refusal and retained audit diagnostics
+        run: python3 apps/security-inspector/tests/test_detector_composition.py
       - name: Verify operator commands with synthetic environment fixtures
         run: python3 playground/environment-planning/verify.py
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
