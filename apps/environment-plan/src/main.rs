@@ -1,4 +1,5 @@
 use std::{env, fs, path::Path};
+mod maintenance;
 
 use vpremises_environment_deployment::{
     Ledger, Receipt, ResolvedEnvironment, Result, desired_digest, load_environment,
@@ -15,6 +16,7 @@ fn main() {
 
 fn run(arguments: &[String]) -> Result<()> {
     match arguments {
+        [command, ..] if command.starts_with("maintenance-") => maintenance::run(arguments)?,
         [command, resolved, binding, inventory, jitter] if command == "render-maintenance" => {
             let desired = read_json::<ResolvedEnvironment>(resolved)?;
             let binding =
@@ -39,12 +41,12 @@ fn run(arguments: &[String]) -> Result<()> {
         }
         [command, resolved, ledger] if command == "plan" => {
             let desired = read_json::<ResolvedEnvironment>(resolved)?;
-            print_json(&Ledger::open(ledger)?.plan(&desired)?)?;
+            print_json(&Ledger::open_private(ledger)?.plan(&desired)?)?;
         }
         [command, resolved, ledger, receipt] if command == "record" => {
             let desired = read_json::<ResolvedEnvironment>(resolved)?;
             let receipt = read_json::<Receipt>(receipt)?;
-            let recorded = Ledger::open(ledger)?.record(&desired, &receipt)?;
+            let recorded = Ledger::open_private(ledger)?.record(&desired, &receipt)?;
             print_json(&serde_json::json!({ "recorded": recorded }))?;
         }
         [
@@ -82,7 +84,9 @@ fn run(arguments: &[String]) -> Result<()> {
 }
 
 fn read_json<T: serde::de::DeserializeOwned>(path: impl AsRef<Path>) -> Result<T> {
-    Ok(serde_json::from_slice(&fs::read(path)?)?)
+    Ok(serde_json::from_slice(
+        &zixcel_bounded_io::read_regular_file(path, 1024 * 1024)?,
+    )?)
 }
 
 fn print_json(value: &impl serde::Serialize) -> Result<()> {

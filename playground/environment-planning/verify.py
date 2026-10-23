@@ -3,6 +3,7 @@ import json
 import pathlib
 import subprocess
 import tempfile
+from finite_maintenance import verify as verify_finite_maintenance
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 FIXTURES = pathlib.Path(__file__).resolve().parent
@@ -33,4 +34,5 @@ with tempfile.TemporaryDirectory(prefix="vpremises-plan-fixture-") as temporary:
     assert command("vpremises-environment-plan", "record", resolved, ledger, receipt)["recorded"]
     assert not command("vpremises-environment-plan", "record", resolved, ledger, receipt)["recorded"]
     assert command("vpremises-environment-plan", "plan", resolved, ledger)["action"] == "no-op"
+    verify_finite_maintenance(ROOT, directory, resolved)
 print("Synthetic resolve/render/plan/receipt/replay/no-op passed; no provider effects")

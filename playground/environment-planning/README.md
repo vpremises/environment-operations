@@ -10,4 +10,9 @@ This playground resolves synthetic product requirements and placement, renders I
 
 The operator commands use the reviewed public `vpremises/environment-deployment` Git revision in Cargo.lock. They do not require a sibling repository, private registry or production profile.
 
+The same verification also runs `finite_maintenance.py` against the compiled
+operator CLI: private local consent, one-use reservation, unknown-result refusal,
+renamed retry refusal, stop/revoke and exact readback/receipts. The fixture writes
+only disposable synthetic state; the CLI starts no maintenance adapter.
+
 A receipt in this playground is synthetic evidence for exercising the ledger; it is not an authenticated production execution receipt. Production execution, signing and authorization require their own established operation path.
