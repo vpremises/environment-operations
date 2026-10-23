@@ -116,3 +116,11 @@ name without overwriting existing reports, and preserves exits 0/2/3. Invalid
 invocations do not create a report. Integrate this command with your own cron or
 systemd timer and use a unique report filename per invocation. It installs no
 service or hook and performs no automatic publication or remediation.
+
+Collector admission retries only the kernel's pre-exec `ExecutableFileBusy`
+refusal, at most 100 milliseconds within the existing monotonic timeout. This
+handles briefly inherited writable descriptors during concurrent process startup.
+No collector has started in that case. All other startup errors fail immediately,
+and a successfully spawned child is never replayed, including nonzero exit,
+timeout or unknown output. Startup diagnostics retain only error kind/errno, not
+command arguments, environment variables or raw collector output.

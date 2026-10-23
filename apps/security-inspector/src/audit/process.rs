@@ -24,12 +24,9 @@ impl Drop for Guard {
 }
 
 pub(super) fn run(mut command: Command, seconds: u64) -> Result<(i32, Value), &'static str> {
-    let mut child = Guard(
-        command
-            .stdout(Stdio::piped())
-            .spawn()
-            .map_err(|_| "collector-unavailable")?,
-    );
+    let deadline = Instant::now() + Duration::from_secs(seconds);
+    command.stdout(Stdio::piped());
+    let mut child = Guard(spawn(&mut command, deadline)?);
     let stdout = child.0.stdout.take().ok_or("collector-unavailable")?;
     let (sender, receiver) = mpsc::sync_channel(1);
     std::thread::spawn(move || {
@@ -40,7 +37,6 @@ pub(super) fn run(mut command: Command, seconds: u64) -> Result<(i32, Value), &'
             .map(|_| bytes);
         let _ = sender.send(result);
     });
-    let deadline = Instant::now() + Duration::from_secs(seconds);
     let mut output = None;
     let status = loop {
         if Instant::now() >= deadline {
@@ -76,4 +72,35 @@ pub(super) fn run(mut command: Command, seconds: u64) -> Result<(i32, Value), &'
     }
     let value = serde_json::from_slice(&bytes).map_err(|_| "collector-invalid-output")?;
     Ok((status.code().ok_or("collector-failed")?, value))
+}
+
+// A concurrent fork may briefly inherit the private copy's writable descriptor.
+// ETXTBSY means exec never began: only this pre-exec refusal can be retried.
+// Once spawn returns a Child, every outcome follows the single existing Guard.
+fn spawn(command: &mut Command, deadline: Instant) -> Result<Child, &'static str> {
+    let retry_end = (Instant::now() + Duration::from_millis(100)).min(deadline);
+    let mut reported = false;
+    loop {
+        match command.spawn() {
+            Ok(child) => return Ok(child),
+            Err(error)
+                if error.kind() == std::io::ErrorKind::ExecutableFileBusy
+                    && Instant::now() < retry_end =>
+            {
+                if !reported {
+                    eprintln!("collector pre-exec file busy; execution not started; bounded admission retry");
+                    reported = true;
+                }
+                std::thread::sleep(Duration::from_millis(5));
+            }
+            Err(error) => {
+                eprintln!(
+                    "collector spawn refused: kind={:?}, errno={:?}",
+                    error.kind(),
+                    error.raw_os_error()
+                );
+                return Err("collector-unavailable");
+            }
+        }
+    }
 }

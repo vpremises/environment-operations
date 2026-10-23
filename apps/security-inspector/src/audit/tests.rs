@@ -42,3 +42,6 @@ mod input_tests;
 mod process_tests;
 #[path = "receipt_tests.rs"]
 mod receipt_tests;
+
+#[path = "spawn_tests.rs"]
+mod spawn_tests;
